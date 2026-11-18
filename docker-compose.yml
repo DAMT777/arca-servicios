@@ -1,0 +1,21 @@
+# Base de datos Postgres del negocio de ARCA, propia de arca-servicios.
+# Lee las credenciales de .env (copia .env.example como .env y cambia la contraseña).
+services:
+  postgres:
+    image: postgres:16
+    container_name: arca-negocio-db
+    environment:
+      POSTGRES_DB: ${SERVICIOS_DB_NAME:-arca_negocio}
+      POSTGRES_USER: ${SERVICIOS_DB_USER:-arca}
+      POSTGRES_PASSWORD: ${SERVICIOS_DB_PASSWORD:?Define SERVICIOS_DB_PASSWORD en .env}
+    ports:
+      - "${SERVICIOS_DB_PORT:-5434}:5432"
+    volumes:
+      - arca-negocio-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      retries: 10
+
+volumes:
+  arca-negocio-data:

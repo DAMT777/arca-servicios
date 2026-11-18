@@ -1,0 +1,15 @@
+# Las credenciales salen de variables de entorno o de un archivo .env en la carpeta de arranque.
+spring:
+  config:
+    import: optional:file:.env[.properties]
+  datasource:
+    url: jdbc:postgresql://${SERVICIOS_DB_HOST:localhost}:${SERVICIOS_DB_PORT:5434}/${SERVICIOS_DB_NAME:arca_negocio}
+    username: ${SERVICIOS_DB_USER:arca}
+    password: ${SERVICIOS_DB_PASSWORD}
+  # schema.sql crea las tablas si no existen y data.sql carga los datos de ejemplo sin duplicarlos
+  sql:
+    init:
+      mode: always
+
+server:
+  port: ${SERVICIOS_PORT:8091}
